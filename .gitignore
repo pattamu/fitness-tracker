@@ -1,0 +1,51 @@
+# Node.js
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Environment variables
+.env
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Docker
+docker-compose.override.yml
+docker-compose.prod.yml
+docker-compose.debug.yml
+.dockerignore
+
+# Postgres data files
+pgdata
+
+# Verdaccio storage
+verdaccio_storage
+
+# VS Code directories and files
+.vscode/
+.history/
+
+# Ignore build artifacts
+build
+dist
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# JetBrains IDEs
+.idea/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Ignore coverage files
+coverage
+*.lcov
