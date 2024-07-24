@@ -1,0 +1,29 @@
+/* Success.css */
+.success-container {
+    text-align: center;
+    padding: 2rem;
+}
+
+.success-container h1 {
+    color: #4caf50;
+    /* Green for success */
+}
+
+.success-container p {
+    font-size: 1.2rem;
+    margin: 1rem 0;
+}
+
+.success-container .login-link {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    color: #ffffff;
+    background-color: #333;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.success-container .login-link:hover {
+    background-color: #555;
+}

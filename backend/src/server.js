@@ -1,7 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { sequelize } = require('./models');
+const cors = require('cors');
 
+const { sequelize } = require('./models');
 const userRoutes = require('./routes/user');
 const workoutRoutes = require('./routes/workout');
 const reportRoutes = require('./routes/report');
@@ -10,11 +11,14 @@ const subscriptionRoutes = require('./routes/subscription');
 
 const {loadWorkoutMaster} = require('./utils/utility')
 
+require('dotenv').config();
+
 const app = express();
 const port = process.env.PORT || 3000;
 
 // Middleware
 app.use(bodyParser.json());
+app.use(cors()); // Enable CORS for all routes
 
 // Routes
 app.use('/api/users', userRoutes);

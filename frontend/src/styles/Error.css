@@ -1,0 +1,49 @@
+/* Error.css */
+.error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+    background-color: #f8d7da; /* Light red background for error */
+    color: #721c24; /* Dark red text color */
+    text-align: center;
+  }
+  
+  .error-container h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #721c24; /* Red color for status code */
+  }
+  
+  .error-container p {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: #721c24; /* Red color for error message */
+  }
+  
+  .error-container img {
+    width: 200px; /* Adjust the size as needed */
+    height: auto;
+    border-radius: 8px;
+    margin-top: 1rem;
+  }
+  
+  .error-container .home-button {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    color: #ffffff;
+    background-color: #333;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 1rem;
+  }
+  
+  .error-container .home-button:hover {
+    background-color: #555;
+  }
+  

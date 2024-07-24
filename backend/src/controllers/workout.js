@@ -1,11 +1,8 @@
-const express = require('express');
-const router = express.Router();
 const { Workout, User } = require('../models');
-const {workoutMaster} = require('../utils/utility');
-const {authenticateToken} = require('../middleware/auth');
+const { workoutMaster } = require('../utils/utility');
 
 // Add workout
-router.post('/add-workout', authenticateToken, async (req, res) => {
+const addWorkout = async (req, res) => {
     try {
         const user = await User.findByPk(req.user.id);
 
@@ -21,9 +18,12 @@ router.post('/add-workout', authenticateToken, async (req, res) => {
         }
 
         const isFreeWorkout = workoutDetails.subscription === 'FREE';
-        const hasValidSubscription = user.subscription.some(sub => {
+        const hasValidSubscription = user?.subscription?.some(sub => {
             const now = new Date();
-            return sub.plan === plan.toUpperCase() && new Date(sub.startDate) <= now && new Date(sub.endDate) >= now;
+            console.log("sub==>", sub.excerciseId === excerciseId);
+            return sub.excerciseId == excerciseId &&
+                sub.plan === plan.toUpperCase() &&
+                new Date(sub.startDate) <= now && new Date(sub.endDate) >= now;
         });
 
         if (!isFreeWorkout && !hasValidSubscription) {
@@ -42,35 +42,43 @@ router.post('/add-workout', authenticateToken, async (req, res) => {
         console.error('Error creating workout:', error);
         res.status(500).json({ error: 'Failed to create workout' });
     }
-});
+};
 
 // View all workouts for a user
-router.get('/search/:userId', authenticateToken, async (req, res) => {
+const getWorkoutsOfUser = async (req, res) => {
     try {
         let workouts = await Workout.findAll({ where: { userId: req.params.userId } });
         workouts = workouts.map(el => {
-            el = {...el.toJSON(), ...workoutMaster[el.excerciseId]};
+            el = { ...el.toJSON(), ...workoutMaster[el.excerciseId] };
+            delete el.subscription;
+            delete el.subscription_price_weekly;
+            delete el.subscription_price_monthly;
+            delete el.subscription_price_yearly;
             return el;
         });
         res.send(workouts);
     } catch (error) {
         res.status(400).send(error);
     }
-});
+};
 
 // View a single workout by ID
-router.get('/search/:userId/:workoutId', authenticateToken, async (req, res) => {
+const getWorkoutbyId = async (req, res) => {
     try {
         let workout = await Workout.findOne({ where: { id: req.params.workoutId, userId: req.params.userId } });
-        workout = {...workout.toJSON(), ...workoutMaster[workout.excerciseId]};
+        workout = { ...workout.toJSON(), ...workoutMaster[workout.excerciseId] };
+        delete workout.subscription;
+        delete workout.subscription_price_weekly;
+        delete workout.subscription_price_monthly;
+        delete workout.subscription_price_yearly;
         res.send(workout);
     } catch (error) {
         res.status(400).send(error);
     }
-});
+};
 
 // Update a workout
-router.put('/search/:workoutId', authenticateToken, async (req, res) => {
+const updateWorkout = async (req, res) => {
     try {
         const workout = await Workout.findByPk(req.params.workoutId);
         await workout.update(req.body);
@@ -78,10 +86,10 @@ router.put('/search/:workoutId', authenticateToken, async (req, res) => {
     } catch (error) {
         res.status(400).send(error);
     }
-});
+};
 
 // Delete a workout
-router.delete('/search/:workoutId', authenticateToken, async (req, res) => {
+const deleteWorkout = async (req, res) => {
     try {
         const workout = await Workout.findByPk(req.params.workoutId);
         await workout.destroy();
@@ -89,15 +97,15 @@ router.delete('/search/:workoutId', authenticateToken, async (req, res) => {
     } catch (error) {
         res.status(400).send(error);
     }
-});
+};
 
-router.get('/csv', async (req, res) => {
+const getCSV = async (req, res) => {
     try {
         console.log("workoutMaster==>", workoutMaster);
         res.send(workoutMaster);
     } catch (error) {
         res.status(400).send(error);
     }
-});
+};
 
-module.exports = router;
+module.exports = { addWorkout, getWorkoutsOfUser, getWorkoutbyId, updateWorkout, deleteWorkout, getCSV };

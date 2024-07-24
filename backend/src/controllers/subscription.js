@@ -1,16 +1,13 @@
-const express = require('express');
-const router = express.Router();
 const { User, sequelize } = require('../models');
-const {authenticateToken} = require('../middleware/auth');
-const {workoutMaster, calculateEndDate} = require('../utils/utility');
+const { workoutMaster, calculateEndDate } = require('../utils/utility');
 
 // Subscription wise report
-router.post('/subscribe/:excerciseId/:plan', authenticateToken, async (req, res) => {
+const subscribeExcercise = async (req, res) => {
     const transaction = await sequelize.transaction();
     try {
         const user = await User.findByPk(req.user.id);
         if (!user) {
-            throw new Error('User not found');
+            return res.status(404).json({ error: 'User not found' });
         }
         const newSubscription = {
             excerciseId: workoutMaster[req.params.excerciseId]['id'],
@@ -20,10 +17,13 @@ router.post('/subscribe/:excerciseId/:plan', authenticateToken, async (req, res)
             endDate: calculateEndDate(req.params.plan)
         };
         if (user.balance < newSubscription.price) {
-            throw new Error('Insufficient balance');
+            return res.status(400).json({ error: 'Insufficient balance' });
         }
 
-        user.subscription.push(newSubscription);
+        if (user.subscription.some(user => user.excerciseId === workoutMaster[req.params.excerciseId]['id'])) {
+            return res.status(400).json({ error: 'subscription already taken' });
+        }
+        user.subscription = [...user.subscription, newSubscription];
         user.balance -= newSubscription.price;
 
         await user.save({ transaction });
@@ -31,13 +31,12 @@ router.post('/subscribe/:excerciseId/:plan', authenticateToken, async (req, res)
 
         console.log('Subscription added successfully:', newSubscription);
 
-        res.send({"msg": 'Subscription added successfully:'});
+        res.send({ "msg": 'Subscription added successfully:' });
     } catch (error) {
         await transaction.rollback();
         console.error('Error adding subscription:', error);
-        res.status(400).send(error);
+        res.status(500).send(error);
     }
-});
+};
 
-
-module.exports = router;
+module.exports = { subscribeExcercise };

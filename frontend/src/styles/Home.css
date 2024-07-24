@@ -1,0 +1,74 @@
+/* Home.css */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+}
+
+nav ul {
+  display: flex;
+  list-style-type: none;
+  padding: 0;
+}
+
+nav ul li {
+  margin: 0 10px;
+}
+
+nav ul li button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.welcome-text {
+  color: blue; /* Change this to the desired color */
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.content {
+  width: 100%;
+  max-width: 800px;
+  margin-top: 20px;
+}
+
+.profile-details, .workouts-details, .reports-details {
+  background: #f0f0f0;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.profile-details p, .workouts-details p, .reports-details p {
+  margin: 10px 0;
+}
+
+.profile-details p strong {
+  display: inline-block;
+  width: 120px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+table th, table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+table th {
+  background-color: #f2f2f2;
+  text-align: left;
+}
+
+table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+table tr:hover {
+  background-color: #ddd;
+}
